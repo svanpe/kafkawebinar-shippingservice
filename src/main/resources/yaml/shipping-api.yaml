@@ -1,0 +1,246 @@
+openapi: 3.0.1
+info:
+  title: Swagger WebShop Shipping API
+  description: 'This is a sample API for handling parcels in a webshop.'
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+tags:
+- name: shipping
+  description: this API allows to create a new parcel to deliver, update the status.
+  externalDocs:
+    description: Find out more
+    url: http://swagger.io
+
+paths:
+  /parcel:
+    post:
+      tags:
+      - shipping
+      summary: Add a new parcel to ship
+      operationId: createParcel
+      requestBody:
+        description: Parcel object that needs to be created 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Parcel'
+        required: true
+      responses:
+        201:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+
+        405:
+          description: Invalid input
+          content: {}
+      x-codegen-request-body-name: body
+      
+  /parcel/findByStatus:
+    get:
+      tags:
+      - parcel
+      summary: Finds Parcels by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findPaymentsByStatus
+      parameters:
+      - name: status
+        in: query
+        description: Status values that need to be considered for filter
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+              - placed
+              - prepared
+              - in_delivery
+              - delivered      
+
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parcel'
+        400:
+          description: Invalid status value
+          content: {}
+
+  /parcel/{parcelId}:
+    patch:
+      tags:
+      - parcel
+      summary: update the status of a parcel
+      description: update a single parcel
+      operationId: updateParcelStatus
+      parameters:
+      - name: parcelId
+        in: path
+        description: ID of parcel to update
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: new status of parcel
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  enum:
+                  - placed
+                  - prepared
+                  - in_delivery
+                  - delivered      
+                
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: parcel not found
+          content: {}
+        405:
+          description: Validation exception
+          content: {}
+      x-codegen-request-body-name: body
+    get:
+      tags:
+      - parcel
+      summary: Find parcel by ID
+      description: Returns a single parcel
+      operationId: getParcelById
+      parameters:
+      - name: parcelId
+        in: path
+        description: ID of parcel to return
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Parcel not found
+          content: {}
+
+ 
+components:
+  schemas:
+ 
+    Parcel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        status:
+          type: string
+          description: parcel Status
+          enum:
+          - placed
+          - prepared
+          - in_delivery
+          - delivered      
+        order:
+          $ref: '#/components/schemas/Order'
+          
+    Order:
+      type: object
+      properties:
+  
+        id:
+          type: integer
+          format: int64
+        creationDate:
+          type: string
+          format: date
+        customer:
+          $ref: '#/components/schemas/Customer'
+        status:
+          type: string
+          description: Order Status
+          enum:
+          - placed
+          - payed
+          - shipped
+          - delivered
+        orderItems:
+          type: array
+          items: 
+              $ref: '#/components/schemas/OrderItem'
+
+
+    OrderItem:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          product:
+            $ref: '#/components/schemas/Product'
+          quantity:
+            type: integer
+            format: int32
+    
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+          
+    Customer:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          firstName:
+            type: string
+          lastName:
+            type: string
+          email:
+            type: string
+
+ 
+ 
