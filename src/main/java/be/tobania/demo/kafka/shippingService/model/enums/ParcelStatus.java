@@ -1,32 +1,27 @@
 package be.tobania.demo.kafka.shippingService.model.enums;
 
-
-import lombok.Getter;
-
-@Getter
-public enum StatusEnum {
+public enum ParcelStatus {
 
     PLACED("placed"),
 
-    PAYED("payed"),
+    PREPARED("prepared"),
 
-    SHIPPED("shipped"),
+    IN_DELIVERY("in_delivery"),
 
     DELIVERED("delivered");
 
     private String value;
 
-private StatusEnum(String value){
-    this.value = value;
-}
+    private ParcelStatus(String value){
+        this.value = value;
+    }
 
-    public static StatusEnum fromValue(String text) {
-        for (StatusEnum b : values()) {
+    public static ParcelStatus fromValue(String text) {
+        for (ParcelStatus b : values()) {
             if (String.valueOf(b.value).equals(text)) {
                 return b;
             }
         }
         return null;
     }
-
 }

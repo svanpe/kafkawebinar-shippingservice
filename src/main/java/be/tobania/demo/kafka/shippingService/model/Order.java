@@ -1,6 +1,6 @@
 package be.tobania.demo.kafka.shippingService.model;
 
-import be.tobania.demo.kafka.shippingService.model.enums.StatusEnum;
+import be.tobania.demo.kafka.shippingService.model.enums.OrderStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ public class Order {
 
     private Customer customer;
 
-    private StatusEnum status;
+    private OrderStatus status;
 
     private List<OrderItem> orderItems;
 }

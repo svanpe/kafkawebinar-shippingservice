@@ -2,16 +2,14 @@ package be.tobania.demo.kafka.shippingService.service.mapper;
 
 
 import be.tobania.demo.kafka.shippingService.entities.OrderEntity;
-import be.tobania.demo.kafka.shippingService.model.Customer;
-import be.tobania.demo.kafka.shippingService.model.Order;
-import be.tobania.demo.kafka.shippingService.model.OrderItem;
-import be.tobania.demo.kafka.shippingService.model.Product;
-import be.tobania.demo.kafka.shippingService.model.enums.StatusEnum;
+import be.tobania.demo.kafka.shippingService.entities.ParcelEntity;
+import be.tobania.demo.kafka.shippingService.model.*;
+import be.tobania.demo.kafka.shippingService.model.enums.OrderStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OrderEntityApiMapper {
+public class ParcelEntityApiMapper {
 
     public static Order mapOrder(OrderEntity order){
 
@@ -43,11 +41,24 @@ public class OrderEntityApiMapper {
         orderApi.setId(order.getId());
         orderApi.setCreationDate(order.getCreationDate());
         orderApi.setCustomer(customer);
-        orderApi.setStatus(StatusEnum.fromValue(order.getStatus()));
+        orderApi.setStatus(OrderStatus.fromValue(order.getStatus()));
         orderApi.setOrderItems(orderItemList);
 
         return orderApi;
 
     }
+
+    public static Parcel maParcel(ParcelEntity parcel){
+
+        Parcel parcelAPI = new Parcel();
+
+        parcelAPI.setOrder(mapOrder(parcel.getOrder()));
+
+        parcelAPI.setStatus(parcel.getStatus());
+
+        return parcelAPI;
+
+    }
+
 
 }

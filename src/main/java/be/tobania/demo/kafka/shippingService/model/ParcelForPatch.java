@@ -1,6 +1,7 @@
 package be.tobania.demo.kafka.shippingService.model;
 
-import be.tobania.demo.kafka.shippingService.model.enums.StatusEnum;
+import be.tobania.demo.kafka.shippingService.model.enums.OrderStatus;
+import be.tobania.demo.kafka.shippingService.model.enums.ParcelStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +12,8 @@ import org.springframework.validation.annotation.Validated;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderForPatch {
+public class ParcelForPatch {
 
-    private StatusEnum status;
+    private ParcelStatus status;
 
 }

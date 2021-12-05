@@ -1,10 +1,8 @@
 package be.tobania.demo.kafka.shippingService.service.mapper;
 
-import be.tobania.demo.kafka.shippingService.entities.CustomerEntity;
-import be.tobania.demo.kafka.shippingService.entities.OrderEntity;
-import be.tobania.demo.kafka.shippingService.entities.OrderItemEntity;
-import be.tobania.demo.kafka.shippingService.entities.ProductEntity;
+import be.tobania.demo.kafka.shippingService.entities.*;
 import be.tobania.demo.kafka.shippingService.model.Order;
+import be.tobania.demo.kafka.shippingService.model.Parcel;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -12,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional
-public class OrderApiEntityMapper {
+public class ParcelApiEntityMapper {
 
 
     public static OrderEntity mapOrder(Order order){
@@ -42,6 +40,18 @@ public class OrderApiEntityMapper {
         orderEntity.setOrderItems(orderItemList);
 
         return orderEntity;
+
+    }
+
+    public static ParcelEntity maParcelEntity(Parcel parcel){
+
+        ParcelEntity parcelEntity = new ParcelEntity();
+
+        parcelEntity.setOrder(mapOrder(parcel.getOrder()));
+
+        parcelEntity.setStatus(parcel.getStatus());
+
+        return parcelEntity;
 
     }
 

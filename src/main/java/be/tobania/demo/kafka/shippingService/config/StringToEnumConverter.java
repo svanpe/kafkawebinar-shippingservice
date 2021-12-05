@@ -1,11 +1,11 @@
 package be.tobania.demo.kafka.shippingService.config;
 
-import be.tobania.demo.kafka.shippingService.model.enums.StatusEnum;
+import be.tobania.demo.kafka.shippingService.model.enums.OrderStatus;
 import org.springframework.core.convert.converter.Converter;
 
-public class StringToEnumConverter implements Converter<String, StatusEnum> {
+public class StringToEnumConverter implements Converter<String, OrderStatus> {
     @Override
-    public StatusEnum convert(String input) {
-        return StatusEnum.valueOf(input.toUpperCase());
+    public OrderStatus convert(String input) {
+        return OrderStatus.valueOf(input.toUpperCase());
     }
 }
