@@ -56,6 +56,8 @@ public class ParcelEntityApiMapper {
 
         parcelAPI.setStatus(parcel.getStatus());
 
+        parcelAPI.setId(parcel.getId());
+
         return parcelAPI;
 
     }
