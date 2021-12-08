@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class ShippingService {
 
     private static final String ORDER_TOPIC = "orders";
-    private static final String SHipping_TOPIC = "shipping";
+    private static final String SHIPPING_TOPIC = "shipping";
 
 
     private final ParcelRepository parcelRepository;
@@ -45,6 +45,10 @@ public class ShippingService {
         ParcelEntity addedParcel = parcelRepository.save(parcelEntity);
 
         Parcel parcelApi = ParcelEntityApiMapper.maParcel(addedParcel);
+
+        if(parcelApi.getStatus()!=null){
+            publishParcel(parcelApi);
+        }
 
         return parcelApi;
     }
@@ -71,6 +75,10 @@ public class ShippingService {
 
         Parcel parcelApi = ParcelEntityApiMapper.maParcel(addedParcel);
 
+        log.info("publish updated parcel");
+
+        publishParcel(parcelApi);
+
         return parcelApi;
     }
 
@@ -91,7 +99,7 @@ public class ShippingService {
 
         log.info("start publishing parcel");
 
-        kafkaTemplate.send(SHipping_TOPIC, parcel.getId().toString(), parcel);
+        kafkaTemplate.send(SHIPPING_TOPIC, parcel.getId().toString(), parcel);
 
         log.info("payment published");
 
@@ -104,7 +112,7 @@ public class ShippingService {
         //TOD: refactor this part of the code to make more readable
 
         if (OrderStatus.PAYED == order.getStatus()) {
-            log.info(String.format("#### -> Consumed new order with status-> %s", order.getStatus().name()));
+            log.info(String.format(" Consumed new order with status-> %s", order.getStatus().name()));
 
             log.info("generate a new parcel");
 
