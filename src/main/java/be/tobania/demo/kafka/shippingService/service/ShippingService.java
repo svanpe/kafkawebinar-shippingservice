@@ -112,7 +112,7 @@ public class ShippingService {
         //TOD: refactor this part of the code to make more readable
 
         if (OrderStatus.PAYED == order.getStatus()) {
-            log.info(String.format(" Consumed new order with status-> %s", order.getStatus().name()));
+            log.info(String.format("# Consumed new order with status-> %s", order.getStatus().name()));
 
             log.info("generate a new parcel");
 
