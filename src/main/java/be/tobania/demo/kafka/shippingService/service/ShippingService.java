@@ -14,8 +14,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -99,14 +102,25 @@ public class ShippingService {
 
         log.info("start publishing parcel");
 
-        kafkaTemplate.send(SHIPPING_TOPIC, parcel.getId().toString(), parcel);
+        ListenableFuture<SendResult<String, Parcel>> future  = kafkaTemplate.send(SHIPPING_TOPIC, parcel.getId().toString(), parcel);
 
-        log.info("payment published");
+        future.addCallback(new ListenableFutureCallback<SendResult<String, Parcel>>() {
+            @Override
+            public void onSuccess(SendResult<String, Parcel> result) {
+                log.info(String.format("Produced event to topic %s: key = %-10s", SHIPPING_TOPIC, parcel.getId().toString()));
+            }
+            @Override
+            public void onFailure(Throwable ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        log.info("parcel published");
 
     }
 
 
-    @KafkaListener(topics = ORDER_TOPIC, groupId = "shipping-service")
+    @KafkaListener(topics = ORDER_TOPIC, groupId = "shipping-service-consumer-id")
     public void consume(Order order) throws IOException {
 
         //TOD: refactor this part of the code to make more readable

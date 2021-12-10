@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/parcel")
+@RequestMapping("/shipping")
 public class ShippingController {
 
 
